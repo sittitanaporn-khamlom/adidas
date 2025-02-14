@@ -77,19 +77,20 @@ class AdidasScreen extends StatelessWidget {
 
                   SizedBox(height: 10),
 
-                  // Grid of Buttons (SALE, SPORT, NEW & TRENDING, GIFT CARDS)
-                  GridView.count(
+                  // ✅ Grid of Buttons (SALE, SPORT, NEW & TRENDING, GIFT CARDS) แบบขนาด Auto
+                  GridView.builder(
                     shrinkWrap: true,
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 5,
-                    mainAxisSpacing: 5,
-                    childAspectRatio: 3.5,
-                    children: [
-                      _buildCategoryItem(Icons.percent, "SALE"),
-                      _buildCategoryItem(Icons.directions_run, "SPORT"),
-                      _buildCategoryItem(Icons.local_fire_department, "NEW & TRENDING"),
-                      _buildCategoryItem(Icons.card_giftcard, "GIFT CARDS"),
-                    ],
+                    physics: NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 5,
+                      mainAxisSpacing: 5,
+                      childAspectRatio: 1.5, // ✅ ปรับอัตราส่วนให้ดีขึ้น
+                    ),
+                    itemCount: categories.length,
+                    itemBuilder: (context, index) {
+                      return _buildCategoryItem(categories[index]['icon']!, categories[index]['label']!);
+                    },
                   ),
                 ],
               ),
@@ -100,7 +101,15 @@ class AdidasScreen extends StatelessWidget {
     );
   }
 
-  // Widget สำหรับสร้างปุ่มหมวดหมู่
+  // รายการปุ่มของ GridView
+  final List<Map<String, dynamic>> categories = [
+    {'icon': Icons.percent, 'label': "SALE"},
+    {'icon': Icons.directions_run, 'label': "SPORT"},
+    {'icon': Icons.local_fire_department, 'label': "NEW & TRENDING"},
+    {'icon': Icons.card_giftcard, 'label': "GIFT CARDS"},
+  ];
+
+  // ✅ Widget สำหรับสร้างปุ่มหมวดหมู่ (ขนาด Auto)
   Widget _buildCategoryItem(IconData icon, String label) {
     return Container(
       decoration: BoxDecoration(
@@ -116,13 +125,14 @@ class AdidasScreen extends StatelessWidget {
           ),
         ],
       ),
-      padding: EdgeInsets.symmetric(vertical: 10),
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 8), // ✅ ปรับ Padding
       child: Column(
+        mainAxisSize: MainAxisSize.min, // ✅ ให้ขนาดปรับตามเนื้อหา
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(icon, size: 24, color: Colors.black),
-          SizedBox(height: 3),
-          Text(label, style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold)),
+          SizedBox(height: 5),
+          Text(label, textAlign: TextAlign.center, style: TextStyle(color: Colors.black, fontSize: 12, fontWeight: FontWeight.bold)),
         ],
       ),
     );
